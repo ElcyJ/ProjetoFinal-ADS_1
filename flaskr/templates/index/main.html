@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Página Inicial{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<body>
+    <h1>Lista de Livros</h1>
+    <table>
+        <tbody>
+          <form  action="{{url_for('index.search')}}" method="get" enctype="multipart/form-data">
+            <label for="busca">Busca</label>
+            <input type="search" name="search" id="search">
+            <label for="tipo">Pesquisar por</label>
+            <select name="type" id="search">
+              <option value="titulo">Título</option>
+              <option value="autor">Autor</option>
+              <option value="ano">Ano</option>
+              <option value="isbn">Isbn</option>
+            </select>
+              <select name="order" id="order">
+                <option value="DESC">desc</option>
+                <option value="ASC">asc</option>
+              </select>
+            <input type="submit" value="Pesquisar">
+          </form>
+          {% for livro in books %}
+              <tr>
+                  <td>{{ livro.title }}</td>
+                  <td> <a href="{{ url_for('index.book_details', isbn=livro.isbn) }}">Detalhes</a></td>
+              </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+</body>
+{% endblock %}

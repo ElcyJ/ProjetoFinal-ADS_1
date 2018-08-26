@@ -1,6 +1,7 @@
 import functools
 
 from flaskr.models.profile import *
+from flaskr.index import *
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -75,7 +76,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user[0]
-            return redirect(url_for('hello'))
+            return redirect(url_for('index.main'))
 
         flash(error)
 
@@ -97,14 +98,4 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
-
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-
-        return view(**kwargs)
-
-    return wrapped_view
+    return redirect(url_for('index.main'))

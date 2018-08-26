@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Detalhes{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<body>
+    <h1>{{ book.title }}</h1>
+    <table>
+        <tbody>
+                <p>Autor: {{ book.author }}</p>
+                <p>Ano de lançamento: {{ book.year }}</p>
+                <p>Isbn: {{ book.isbn }}</p>
+                {% if book.reviewable and session.get('user_id') %}
+                    <form  action="{{url_for('index.set_review')}}" method="post" enctype="multipart/form-data">
+                      <label for="nota">Nota</label>
+                      <input type="number" name="rate">
+                      <label for="comentario">Revisão</label>
+                      <textarea rows="5" type="text" name="commentary"></textarea>
+                      <input type="submit" value="Enviar">
+                    </form>
+                {% endif %}
+                {% for revisao in reviews %}
+                    <tr>
+                        <td>{{ revisao.rate }}</td>
+                        <td>{{ revisao.commentary}}</td>
+                    </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+</body>
+{% endblock %}
