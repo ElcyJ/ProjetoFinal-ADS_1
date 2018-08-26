@@ -12,6 +12,8 @@
                 <p>Autor: {{ book.author }}</p>
                 <p>Ano de lançamento: {{ book.year }}</p>
                 <p>Isbn: {{ book.isbn }}</p>
+                <p>Good average: {{ book.good.books[0].average_rating }}</p>
+                <p>Average rating: {{ book.avg }}</p>
                 {% if book.reviewable and session.get('user_id') %}
                     <form  action="{{url_for('index.set_review')}}" method="post" enctype="multipart/form-data">
                       <label for="nota">Nota</label>
@@ -22,10 +24,10 @@
                     </form>
                 {% endif %}
                 {% for revisao in reviews %}
-                    <tr>
-                        <td>{{ revisao.rate }}</td>
-                        <td>{{ revisao.commentary}}</td>
-                    </tr>
+                      <p>{{ revisao.rate }}</p>
+                      <p>{{ revisao.commentary}}</p>
+
+
                 {% endfor %}
         </tbody>
     </table>

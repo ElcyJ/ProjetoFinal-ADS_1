@@ -2,7 +2,9 @@ import functools
 
 from flaskr.models.book import *
 from flaskr.models.review import *
+from flaskr.api_service import Api
 
+api = Api.get_api()
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -58,6 +60,7 @@ def book_details(isbn):
     session['isbn'] = book.isbn
     reviews = reviewDAO.get_reviews(book.isbn)
 
+    book.good = api.get_good_book(book.isbn)
     book.reviewable = reviewDAO.isValid( book.isbn, session.get('user_id'))
 
     return render_template('index/details.html', book=book, reviews=reviews)
@@ -73,6 +76,9 @@ def set_review():
         rate = request.form['rate']
         commentary = request.form['commentary']
 
-
-    review = reviewDAO.save_review(rate, commentary, book_id, user_id)
-    return  book_details(book_id)
+    reviewable = reviewDAO.isValid(book_id, user_id)
+    if(reviewable):
+        review = reviewDAO.save_review(rate, commentary, book_id, user_id)
+        return  book_details(book_id)
+    else:
+        return  book_details(book_id)

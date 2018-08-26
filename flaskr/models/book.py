@@ -31,6 +31,19 @@ class BookDAO():
 
         return books
 
+    def get_avg_rate(self,  isbn):
+        db, conn = get_db()
+        db.execute(
+                'SELECT CAST(AVG(rate) AS DECIMAL(10,2)) FROM reviews where book_id = %s  GROUP BY book_id',(isbn)
+        )
+
+        avg = db.fetchone()
+        if avg:
+            return avg[0]
+        else:
+            return ""
+
+
     def get_book(self, isbn):
         db, conn = get_db()
         db.execute(
@@ -40,6 +53,7 @@ class BookDAO():
 
         book = Book(b[0], b[1], b[2], b[3])
 
+        book.avg = self.get_avg_rate(isbn)
         return book
 
 
