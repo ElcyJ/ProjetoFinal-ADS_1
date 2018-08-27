@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Detalhes{% endblock %}</h1>
+  <h1>{% block title %}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -9,55 +9,71 @@
     <h1>{{ book.title }}</h1>
     <table>
         <tbody>
+        <div class="row text-center">
 
-          <div class="collumms">
-          <div class="card card border-primary mb-3" style="width: 14rem;">
-            <img class="card-img-top" src="{{ book.image_url }}" alt="Card image cap">
+        <div class="col-lg-2 col-md-2 mb-2">
+          <div class="card">
+            <img class="card-img-top" src="{{ book.image_url }}" alt="">
+          </div>
+        </div>
+
+        <div class="col-10">
+          <div class="card">
             <div class="card-body">
-              <p class="card-text">Autor: {{ book.author }}</p>
-              <p class="card-text">Ano de lançamento: {{ book.year }}</p>
-              <p class="card-text">Isbn: {{ book.isbn }}</p>
-              <p class="card-text">Rate Books nota: {{ book.avg }}</p>
-              <p class="card-text">Goodreads nota: {{ book.good.books[0].average_rating }}</p>
-            </div>
-            <div collumms col-4>
-            <div class="card card border-primary mb-3" style="width: 14rem;">
-              <div class="card-body">
+              <h4 class="card-title">Descrição</h4>
+              <p class="card-text">{{ book.description|safe  }}</p>
+                <h4 class="card-title">Detalhes</h4>
                 <p class="card-text">Autor: {{ book.author }}</p>
                 <p class="card-text">Ano de lançamento: {{ book.year }}</p>
                 <p class="card-text">Isbn: {{ book.isbn }}</p>
                 <p class="card-text">Rate Books nota: {{ book.avg }}</p>
                 <p class="card-text">Goodreads nota: {{ book.good.books[0].average_rating }}</p>
-              </div>
             </div>
           </div>
         </div>
+      </div>
 
+      {% if book.reviewable and session.get('user_id') %}
+          <h4> Deixe sua opnião! </h4>
+          <form  action="{{url_for('index.set_review')}}" role="form" method="post" id="reused_form" >
+            <div class="form-group">
+                  <label for="nota">Nota</label>
+                <input type="number" class="form-control" name="rate" required maxlength="50" max=5 min=0>
+            </div>
+            <div class="form-group">
+                <label for="comentario">Revisão</label>
+                <textarea class="form-control" type="textarea" name="commentary" placeholder="Escreva sua revisão" maxlength="6000" rows="7"></textarea>
+            </div>
+            <button type="submit" class="btn btn-lg btn-success pull-right" id="btnContactUs">Enviar</button>
+          </form>
+        </br>
+      </br>
+      {% endif %}
 
-                <img src="{{ book.image_url }}"></img>
+      <h4> Revisões Gerais </h3>
+      <table class="table table-striped">
+          <tbody>
+              <thead>
+                <thead>
+                  <tr>
+                    <th scope="col">Usuário</th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Avaliação</th>
+                  </tr>
+                </thead>
+            {% for revisao in reviews %}
+                <tbody>
+                  <tr>
+                      <td>{{ revisao.username }}</td>
+                      <td>{{ revisao.rate }}</td>
+                      <td>{{ revisao.commentary }}</a></td>
+                  </tr>
+                </tbody>
 
-                <p class="desc">Description: </p> {{ book.description|safe  }}
+            {% endfor %}
+          </tbody>
+      </table>
 
-                <p>Autor: {{ book.author }}</p>
-                <p>Ano de lançamento: {{ book.year }}</p>
-                <p>Isbn: {{ book.isbn }}</p>
-                <p>Good average: {{ book.good.books[0].average_rating }}</p>
-                <p>Average rating: {{ book.avg }}</p>
-
-                {% if book.reviewable and session.get('user_id') %}
-                    <form  action="{{url_for('index.set_review')}}" method="post" enctype="multipart/form-data">
-                      <label for="nota">Nota</label>
-                      <input type="number" max=5 min=0 name="rate">
-                      <label for="comentario">Revisão</label>
-                      <textarea rows="5" type="text" name="commentary"></textarea>
-                      <input type="submit" value="Enviar">
-                    </form>
-                {% endif %}
-                {% for revisao in reviews %}
-                      <p>{{ revisao.username }}</p>
-                      <p>{{ revisao.rate }}</p>
-                      <p>{{ revisao.commentary }}</p>
-                {% endfor %}
         </tbody>
     </table>
 </body>
