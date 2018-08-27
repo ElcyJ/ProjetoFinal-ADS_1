@@ -1,6 +1,5 @@
 import functools
 
-from flaskr.models.profile import *
 from flaskr.index import *
 
 from flask import (

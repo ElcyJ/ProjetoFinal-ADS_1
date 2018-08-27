@@ -9,25 +9,54 @@
     <h1>{{ book.title }}</h1>
     <table>
         <tbody>
+
+          <div class="collumms">
+          <div class="card card border-primary mb-3" style="width: 14rem;">
+            <img class="card-img-top" src="{{ book.image_url }}" alt="Card image cap">
+            <div class="card-body">
+              <p class="card-text">Autor: {{ book.author }}</p>
+              <p class="card-text">Ano de lançamento: {{ book.year }}</p>
+              <p class="card-text">Isbn: {{ book.isbn }}</p>
+              <p class="card-text">Rate Books nota: {{ book.avg }}</p>
+              <p class="card-text">Goodreads nota: {{ book.good.books[0].average_rating }}</p>
+            </div>
+            <div collumms col-4>
+            <div class="card card border-primary mb-3" style="width: 14rem;">
+              <div class="card-body">
+                <p class="card-text">Autor: {{ book.author }}</p>
+                <p class="card-text">Ano de lançamento: {{ book.year }}</p>
+                <p class="card-text">Isbn: {{ book.isbn }}</p>
+                <p class="card-text">Rate Books nota: {{ book.avg }}</p>
+                <p class="card-text">Goodreads nota: {{ book.good.books[0].average_rating }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+                <img src="{{ book.image_url }}"></img>
+
+                <p class="desc">Description: </p> {{ book.description|safe  }}
+
                 <p>Autor: {{ book.author }}</p>
                 <p>Ano de lançamento: {{ book.year }}</p>
                 <p>Isbn: {{ book.isbn }}</p>
                 <p>Good average: {{ book.good.books[0].average_rating }}</p>
                 <p>Average rating: {{ book.avg }}</p>
+
                 {% if book.reviewable and session.get('user_id') %}
                     <form  action="{{url_for('index.set_review')}}" method="post" enctype="multipart/form-data">
                       <label for="nota">Nota</label>
-                      <input type="number" name="rate">
+                      <input type="number" max=5 min=0 name="rate">
                       <label for="comentario">Revisão</label>
                       <textarea rows="5" type="text" name="commentary"></textarea>
                       <input type="submit" value="Enviar">
                     </form>
                 {% endif %}
                 {% for revisao in reviews %}
+                      <p>{{ revisao.username }}</p>
                       <p>{{ revisao.rate }}</p>
-                      <p>{{ revisao.commentary}}</p>
-
-
+                      <p>{{ revisao.commentary }}</p>
                 {% endfor %}
         </tbody>
     </table>

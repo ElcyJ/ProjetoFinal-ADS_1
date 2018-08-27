@@ -61,6 +61,8 @@ def book_details(isbn):
     reviews = reviewDAO.get_reviews(book.isbn)
 
     book.good = api.get_good_book(book.isbn)
+    book.image_url = api.get_good_book_cover(book.isbn)
+    book.description = api.get_good_book_description(book.isbn)
     book.reviewable = reviewDAO.isValid( book.isbn, session.get('user_id'))
 
     return render_template('index/details.html', book=book, reviews=reviews)

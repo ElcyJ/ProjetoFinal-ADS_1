@@ -1,17 +1,37 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Página Inicial{% endblock %}</h1>
-{% endblock %}
+
+  {% block title %}Página Inicial{% endblock %}
+
+  {% block header %}<img src="/static/books-apple-bw.jpg" class="img-fluid" alt="Responsive image">{% endblock %}
 
 {% block content %}
 <body>
-    <h1>Lista de Livros</h1>
-    <table>
+  <!--<nav class="nav nav-pills flex-column flex-sm-row">
+  <form >
+    <input class="form-control" type="search" placeholder="Busca" aria-label="Search">
+    <select class="custom-select" id="inputGroupSelect01">
+      <option selected>Choose..</option>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+    </select>
+    <select class="custom-select" id="inputGroupSelect01">
+      <option selected>Choose..</option>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+    </select>
+    <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+  </form>
+</nav>-->
+    <!--<h1>Lista de Livros</h1>-->
+    <table class="table table-striped table-active">
         <tbody>
+          <nav class="navbar navbar-light bg-light">
           <form  action="{{url_for('index.search')}}" method="get" enctype="multipart/form-data">
             <label for="busca">Busca</label>
-            <input type="search" name="search" id="search">
+            <input type="search" name="search" id="search" >
             <label for="tipo">Pesquisar por</label>
             <select name="type" id="search">
               <option value="titulo">Título</option>
@@ -19,17 +39,31 @@
               <option value="ano">Ano</option>
               <option value="isbn">Isbn</option>
             </select>
+            <label for="ordem">Ordem</label>
               <select name="order" id="order">
-                <option value="DESC">desc</option>
-                <option value="ASC">asc</option>
+                <option value="ASC">Ascendente</option>
+                <option value="DESC">Decrescente</option>
               </select>
             <input type="submit" value="Pesquisar">
           </form>
+        </nav>
+            <thead>
+              <thead class = "thead-dark">
+                <tr>
+                  <th scope="col">Título</th>
+                  <th scope="col">Autor</th>
+                  <th scope="col">Veja mais</th>
+                </tr>
+              </thead>
           {% for livro in books %}
-              <tr>
-                  <td>{{ livro.title }}</td>
-                  <td> <a href="{{ url_for('index.book_details', isbn=livro.isbn) }}">Detalhes</a></td>
-              </tr>
+              <tbody>
+                <tr>
+                    <td>{{ livro.title }}</td>
+                    <td>{{ livro.author }}</td>
+                    <td> <a href="{{ url_for('index.book_details', isbn=livro.isbn) }}">Detalhes</a></td>
+                </tr>
+              </tbody>
+
           {% endfor %}
         </tbody>
     </table>
